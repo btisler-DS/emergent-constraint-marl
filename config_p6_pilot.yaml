@@ -54,4 +54,4 @@ sweep:
 # Output
 output_log: confirmatory_run_p6_pilot.log
 output_json: p6_pilot_summary.json
-device: cpu
+device: cuda
