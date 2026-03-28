@@ -119,6 +119,13 @@ def main() -> None:
         default=str(Path(__file__).parent.parent / "config_p6_confirmatory.yaml"),
         help="Path to config_p6_confirmatory.yaml",
     )
+    parser.add_argument(
+        "--condition",
+        choices=["A", "B", "C", "D"],
+        default=None,
+        help="Run a single condition only (for parallel multi-GPU execution). "
+             "Omit to run all four conditions sequentially.",
+    )
     args = parser.parse_args()
 
     with open(args.config) as f:
@@ -127,13 +134,16 @@ def main() -> None:
     root = Path(__file__).parent.parent
     results_dir = root / cfg["output_dir"]
     results_dir.mkdir(parents=True, exist_ok=True)
-    log_path = str(results_dir / "confirmatory_run_p6.log")
-    json_path = str(root / cfg["output_json"])
+
+    # Condition-specific output paths when running single-condition (parallel mode)
+    suffix = f"_cond{args.condition}" if args.condition else ""
+    log_path = str(results_dir / f"confirmatory_run_p6{suffix}.log")
+    json_path = str(root / cfg["output_json"].replace(".json", f"{suffix}.json"))
 
     setup_logging(log_path)
     logger = logging.getLogger(__name__)
 
-    conditions = cfg["conditions"]
+    conditions = [args.condition] if args.condition else cfg["conditions"]
     seeds = cfg["seeds"]
     fixed_multiplier = cfg["fixed_cost_multiplier"]
 
