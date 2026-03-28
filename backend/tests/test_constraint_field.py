@@ -17,25 +17,25 @@ def test_reset_clears_field():
 
 
 def test_emission_increments_local_cell_only():
-    # With dc=0 and dr=0, only emission happens. Verify weights.
+    # With dc=0 and dr=0, only emission happens. Verify weights (Deviation 1: scaled 0.1x).
     cf = ConstraintField(n_agents=3, diffusion_coefficient=0.0, decay_rate=0.0)
     cf.update({"A": 0, "B": 1, "C": 2})  # DECLARE=0, QUERY=1, RESPOND=2
-    assert cf.F[0] == pytest.approx(0.3)   # A: DECLARE weight
-    assert cf.F[1] == pytest.approx(0.1)   # B: QUERY weight
-    assert cf.F[2] == pytest.approx(0.2)   # C: RESPOND weight
+    assert cf.F[0] == pytest.approx(0.03)   # A: DECLARE weight
+    assert cf.F[1] == pytest.approx(0.01)   # B: QUERY weight
+    assert cf.F[2] == pytest.approx(0.02)   # C: RESPOND weight
 
 
 def test_decay_reduces_field():
     cf = ConstraintField(n_agents=3, diffusion_coefficient=0.0, decay_rate=0.5)
-    cf.update({"A": 0, "B": 0, "C": 0})   # F = [0.3, 0.3, 0.3] after decay: [0.15, 0.15, 0.15]
-    assert np.allclose(cf.F, [0.15, 0.15, 0.15], atol=1e-6)
+    cf.update({"A": 0, "B": 0, "C": 0})   # F = [0.03, 0.03, 0.03] after decay: [0.015, 0.015, 0.015]
+    assert np.allclose(cf.F, [0.015, 0.015, 0.015], atol=1e-6)
 
 
 def test_decay_applied_after_emission():
     # Order: emit then decay. With dr=0.0, field stays at emission value.
     cf = ConstraintField(n_agents=3, diffusion_coefficient=0.0, decay_rate=0.0)
-    cf.update({"A": 0, "B": 0, "C": 0})   # no decay: F = [0.3, 0.3, 0.3]
-    assert np.allclose(cf.F, [0.3, 0.3, 0.3], atol=1e-6)
+    cf.update({"A": 0, "B": 0, "C": 0})   # no decay: F = [0.03, 0.03, 0.03]
+    assert np.allclose(cf.F, [0.03, 0.03, 0.03], atol=1e-6)
 
 
 def test_diffusion_conserves_mass_approximately():
@@ -87,8 +87,8 @@ def test_effective_cost_linear_modulation():
 
 
 def test_multiple_update_steps_accumulate():
-    # Two DECLARE steps for agent A, no diffusion, no decay: F[0] = 0.6
+    # Two DECLARE steps for agent A, no diffusion, no decay: F[0] = 0.06
     cf = ConstraintField(n_agents=3, diffusion_coefficient=0.0, decay_rate=0.0)
     cf.update({"A": 0, "B": 0, "C": 0})
     cf.update({"A": 0, "B": 0, "C": 0})
-    assert cf.F[0] == pytest.approx(0.6, abs=1e-5)
+    assert cf.F[0] == pytest.approx(0.06, abs=1e-5)

@@ -34,10 +34,15 @@ query_cost: 1.5
 respond_cost: 0.8
 
 # P6 constraint field — fixed parameters
+# Deviation 1 (2026-03-27): signal_weights scaled 0.1x from preregistered values.
+# Original: DECLARE=0.3, QUERY=0.1, RESPOND=0.2
+# Applied:  DECLARE=0.03, QUERY=0.01, RESPOND=0.02
+# Reason: original values produced field saturation across all pilot combinations.
+# See preregistration Section 12 and constraint_field.py for full deviation note.
 signal_weights:
-  declare: 0.3
-  query: 0.1
-  respond: 0.2
+  declare: 0.03
+  query: 0.01
+  respond: 0.02
 signal_cost_sensitivity: 1.0
 interaction_radius: local
 

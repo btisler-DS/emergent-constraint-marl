@@ -15,10 +15,16 @@ import numpy as np
 
 # Signal type indices matching Protocol 1/2 convention
 # 0 = DECLARE, 1 = QUERY (INTERROGATIVE), 2 = RESPOND
+#
+# Deviation 1 (2026-03-27): Scaled 0.1x from preregistered values
+# (DECLARE: 0.3->0.03, QUERY: 0.1->0.01, RESPOND: 0.2->0.02).
+# Original values produced F_eq = 2-6x above saturation threshold across all
+# pilot parameter combinations. Scaled values keep F below saturation while
+# preserving the relative weight structure. See preregistration Section 12.
 _SIGNAL_WEIGHTS: dict[int, float] = {
-    0: 0.3,   # DECLARE — assertion, high cost
-    1: 0.1,   # QUERY   — question, low cost
-    2: 0.2,   # RESPOND — reply, medium cost
+    0: 0.03,  # DECLARE — assertion, high cost
+    1: 0.01,  # QUERY   — question, low cost
+    2: 0.02,  # RESPOND — reply, medium cost
 }
 
 _AGENT_INDEX: dict[str, int] = {"A": 0, "B": 1, "C": 2}
