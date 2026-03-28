@@ -1,0 +1,1 @@
+{"diffusion_coefficient": 0.1, "decay_rate": 0.3, "seed": 5, "elapsed_s": 780.8, "field_formed": false, "field_saturated": false, "field_collapsed": false, "entropy_sss_correlation": -0.2608, "final_field_mean": 0.030734, "final_field_std": 0.006416, "final_field_max": 0.039807}

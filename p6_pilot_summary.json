@@ -1,0 +1,72 @@
+{
+  "protocol": "P6_pilot",
+  "condition": "condition_a",
+  "total_runs": 60,
+  "combinations": [
+    {
+      "diffusion_coefficient": 0.1,
+      "decay_rate": 0.05,
+      "field_formed_count": 0,
+      "field_saturated_count": 0,
+      "field_collapsed_count": 0,
+      "mean_entropy_sss_correlation": -0.6496,
+      "meets_target_regime": false
+    },
+    {
+      "diffusion_coefficient": 0.1,
+      "decay_rate": 0.3,
+      "field_formed_count": 0,
+      "field_saturated_count": 0,
+      "field_collapsed_count": 0,
+      "mean_entropy_sss_correlation": -0.3032,
+      "meets_target_regime": false
+    },
+    {
+      "diffusion_coefficient": 0.5,
+      "decay_rate": 0.05,
+      "field_formed_count": 0,
+      "field_saturated_count": 0,
+      "field_collapsed_count": 0,
+      "mean_entropy_sss_correlation": -0.4284,
+      "meets_target_regime": false
+    },
+    {
+      "diffusion_coefficient": 0.5,
+      "decay_rate": 0.3,
+      "field_formed_count": 0,
+      "field_saturated_count": 0,
+      "field_collapsed_count": 0,
+      "mean_entropy_sss_correlation": -0.5052,
+      "meets_target_regime": false
+    },
+    {
+      "diffusion_coefficient": 0.9,
+      "decay_rate": 0.05,
+      "field_formed_count": 0,
+      "field_saturated_count": 0,
+      "field_collapsed_count": 0,
+      "mean_entropy_sss_correlation": -0.3362,
+      "meets_target_regime": false
+    },
+    {
+      "diffusion_coefficient": 0.9,
+      "decay_rate": 0.3,
+      "field_formed_count": 0,
+      "field_saturated_count": 0,
+      "field_collapsed_count": 0,
+      "mean_entropy_sss_correlation": -0.4894,
+      "meets_target_regime": false
+    }
+  ],
+  "viable_combinations": [],
+  "best_combination": {
+    "diffusion_coefficient": 0.1,
+    "decay_rate": 0.05,
+    "field_formed_count": 0,
+    "field_saturated_count": 0,
+    "field_collapsed_count": 0,
+    "mean_entropy_sss_correlation": -0.6496,
+    "meets_target_regime": false
+  },
+  "design_review_required": true
+}
