@@ -7,7 +7,7 @@
 | Field | Value |
 |-------|-------|
 | Preregistration SHA-256 | c286a89037966e56630f5d3ce4cdb4a1621ce7ce9a0f7e7d477a06b8495dffc3 |
-| Zenodo DOI | *(to be filled after Zenodo submission)* |
+| Zenodo DOI | 10.5281/zenodo.19297509 |
 | Pilot commit | adca6fc (tag: p6-pilot-pre-run) |
 
 **No confirmatory runs until the Zenodo DOI is recorded here.**
@@ -15,6 +15,7 @@
 ## Protocol 6 Preregistration
 
 SHA-256: c286a89037966e56630f5d3ce4cdb4a1621ce7ce9a0f7e7d477a06b8495dffc3
+DOI: 10.5281/zenodo.19297509
 File: docs/Protocol6_Preregistration_v3.pdf
 Status: Preregistered — awaiting confirmatory execution
 
