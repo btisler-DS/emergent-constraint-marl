@@ -1,0 +1,60 @@
+# Protocol 6 Confirmatory Configuration
+# DO NOT MODIFY — parameters locked to preregistration v3 (DOI: 10.5281/zenodo.19297509).
+# See docs/Protocol6_Preregistration_v3.pdf for full specification.
+
+# Run parameters
+seeds: [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,
+        25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49]
+num_epochs: 500
+episodes_per_epoch: 10
+
+# Environment (P5 long-span baseline — identical to pilot)
+grid_size: 20
+num_obstacles: 8
+z_layers: 8
+max_steps: 64
+energy_budget: 100.0
+move_cost: 1.0
+collision_penalty: 5.0
+
+# Agent architecture
+signal_dim: 8
+hidden_dim: 64
+depth: 2
+
+# Training
+learning_rate: 0.001
+gamma: 0.99
+
+# Protocol 2 (all_constrained) base parameters
+communication_tax_rate: 0.01
+survival_bonus: 0.1
+declare_cost: 1.0
+query_cost: 1.5
+respond_cost: 0.8
+
+# P6 constraint field — best pilot combination (dc=0.1, dr=0.05)
+signal_cost_sensitivity: 1.0
+diffusion_coefficient: 0.1
+decay_rate: 0.05
+interaction_radius: local
+
+# Condition C fixed tax multiplier
+# Derived from pilot dc=0.1/dr=0.05: pilot_mean_field=0.2287
+# fixed_cost_multiplier = 1 + signal_cost_sensitivity * pilot_mean_field = 1.2287
+pilot_mean_field: 0.2287
+fixed_cost_multiplier: 1.2287
+
+# Signal weights (Deviation 1 — scaled 0.1x from preregistered values)
+signal_weights:
+  declare: 0.03
+  query: 0.01
+  respond: 0.02
+
+# Conditions to run
+conditions: [A, B, C, D]
+
+# Output
+output_dir: results/p6_confirmatory
+output_json: p6_confirmatory_summary.json
+device: cuda
