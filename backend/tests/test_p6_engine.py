@@ -69,10 +69,28 @@ def test_field_resets_between_episodes():
 
 
 def test_effective_cost_modulates_reward():
-    # Both engines complete without error and return numeric avg rewards
-    engine_high = make_engine(diffusion_coefficient=0.9, decay_rate=0.05, seed=7)
-    results_high = engine_high.run()
-    engine_low = make_engine(diffusion_coefficient=0.0, decay_rate=0.9, seed=7)
-    results_low = engine_low.run()
-    assert all(isinstance(r.get("avg_reward_A", 0.0), float) for r in results_high)
-    assert all(isinstance(r.get("avg_reward_A", 0.0), float) for r in results_low)
+    # High diffusion + low decay: field accumulates, cost increases, rewards decrease.
+    # Low diffusion + high decay: field collapses, cost stays near baseline, rewards higher.
+    # With same seed, the only difference is field intensity -> reward difference is causal.
+    config_high = P6Config(
+        seed=7, num_epochs=3, episodes_per_epoch=3,
+        diffusion_coefficient=0.9, decay_rate=0.05,
+    )
+    config_low = P6Config(
+        seed=7, num_epochs=3, episodes_per_epoch=3,
+        diffusion_coefficient=0.0, decay_rate=0.99,
+    )
+    results_high = P6SimulationEngine(config_high).run()
+    results_low = P6SimulationEngine(config_low).run()
+
+    avg_high = np.mean([r["avg_reward_A"] for r in results_high])
+    avg_low = np.mean([r["avg_reward_A"] for r in results_low])
+
+    # High field = higher effective tax = lower reward. Not strict equality,
+    # but high-field agent should not outperform low-field agent on average.
+    assert avg_high <= avg_low + 0.5, (
+        f"High-field avg reward {avg_high:.4f} should not greatly exceed "
+        f"low-field avg reward {avg_low:.4f}"
+    )
+    # Both must return valid floats
+    assert np.isfinite(avg_high) and np.isfinite(avg_low)

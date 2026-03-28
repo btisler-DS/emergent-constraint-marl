@@ -181,10 +181,11 @@ class P6SimulationEngine:
 
         return {"A": aug_a, "B": aug_b, "C": aug_c}
 
-    def _run_episode(self, raw_obs: dict[str, Any]) -> dict[str, Any]:
+    def _run_episode(self, raw_obs: dict[str, Any], tau: float) -> dict[str, Any]:
         """Run one episode. Returns per-episode summary dict."""
         self.field.reset()
-        self.comm_buffer.clear()
+        self.comm_buffer.reset()
+        self.protocol.reset_episode()
         for agent in self.agents:
             agent.clear_episode()
 
@@ -193,7 +194,6 @@ class P6SimulationEngine:
         total_rewards = {"A": 0.0, "B": 0.0, "C": 0.0}
         type_log: list[int] = []
         done = False
-        tau = self.protocol.get_tau(0)
 
         while not done:
             signals: dict[str, torch.Tensor] = {}
@@ -249,9 +249,8 @@ class P6SimulationEngine:
 
             # Depth 2: feed energy delta to AgentA self_model_gru
             if self.config.depth >= 2:
-                energy_now = info["energy"]
-                # energy_prev tracked via env.energy before step — approximate as 0
-                # (delta from previous step not tracked per-step; use 0 as fallback)
+                # Depth 2: energy delta not tracked per-step in P6 pilot (Condition A simplification).
+                # self_model_gru receives constant zero — depth-2 energy self-modelling inactive.
                 self.agent_a.set_energy_delta(0.0)
 
             # Augment next observations (field values updated above)
@@ -296,7 +295,7 @@ class P6SimulationEngine:
         for ep_idx in range(self.config.episodes_per_epoch):
             ep_seed = self.config.seed + epoch * self.config.episodes_per_epoch + ep_idx
             raw_obs = self.env.reset(seed=ep_seed)
-            result = self._run_episode(raw_obs)
+            result = self._run_episode(raw_obs, tau=tau)
 
             for name in ["A", "B", "C"]:
                 epoch_rewards[name] += result["total_rewards"][name]
