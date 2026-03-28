@@ -1,0 +1,52 @@
+# Protocol 6 Pilot Configuration
+# DO NOT MODIFY — parameter values are fixed by pilot spec.
+# Sweep parameters are listed under 'sweep'.
+# See docs/ for the full pilot spec (Protocol6_Pilot_Spec.docx).
+
+# Run parameters
+seeds: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+num_epochs: 200
+episodes_per_epoch: 10
+
+# Environment (P5 long-span baseline)
+grid_size: 20
+num_obstacles: 8
+z_layers: 8
+max_steps: 64
+energy_budget: 100.0
+move_cost: 1.0
+collision_penalty: 5.0
+
+# Agent architecture
+signal_dim: 8
+hidden_dim: 64
+depth: 2
+
+# Training
+learning_rate: 0.001
+gamma: 0.99
+
+# Protocol 2 (all_constrained) base parameters
+communication_tax_rate: 0.01
+survival_bonus: 0.1
+declare_cost: 1.0
+query_cost: 1.5
+respond_cost: 0.8
+
+# P6 constraint field — fixed parameters
+signal_weights:
+  declare: 0.3
+  query: 0.1
+  respond: 0.2
+signal_cost_sensitivity: 1.0
+interaction_radius: local
+
+# Sweep parameters (6 combinations = 3 x 2)
+sweep:
+  diffusion_coefficient: [0.1, 0.5, 0.9]
+  decay_rate: [0.05, 0.3]
+
+# Output
+output_log: confirmatory_run_p6_pilot.log
+output_json: p6_pilot_summary.json
+device: cpu
