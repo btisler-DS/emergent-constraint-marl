@@ -138,7 +138,7 @@ def main() -> None:
 
     logger.info(
         "Config audit | signal_cost_sensitivity=%.1f interaction_radius=%s "
-        "signal_weights declare=%.1f query=%.1f respond=%.1f",
+        "signal_weights declare=%.3f query=%.3f respond=%.3f",
         cfg["signal_cost_sensitivity"],
         cfg["interaction_radius"],
         cfg["signal_weights"]["declare"],
