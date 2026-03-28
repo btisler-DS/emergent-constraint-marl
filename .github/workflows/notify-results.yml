@@ -1,0 +1,41 @@
+name: Notify on confirmatory results push
+
+on:
+  push:
+    branches: [master]
+    paths:
+      - 'results/p6_confirmatory/**'
+      - 'p6_confirmatory_summary*.json'
+
+jobs:
+  notify:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Determine which conditions completed
+        id: check
+        run: |
+          FILES="${{ join(github.event.commits[0].added, ' ') }} ${{ join(github.event.commits[0].modified, ' ') }}"
+          echo "files=$FILES" >> $GITHUB_OUTPUT
+
+      - name: Send email notification
+        uses: dawidd6/action-send-mail@v3
+        with:
+          server_address: smtp.gmail.com
+          server_port: 587
+          secure: false
+          username: ${{ secrets.MAIL_USERNAME }}
+          password: ${{ secrets.MAIL_PASSWORD }}
+          subject: "P6 Confirmatory results pushed — emergent-constraint-marl"
+          to: brucetisler@gmail.com
+          from: "P6 Runner <${{ secrets.MAIL_USERNAME }}>"
+          body: |
+            Protocol 6 confirmatory run results have been pushed to GitHub.
+
+            Commit: ${{ github.sha }}
+            Branch: ${{ github.ref_name }}
+            Repo: https://github.com/${{ github.repository }}
+
+            View results:
+            https://github.com/${{ github.repository }}/tree/${{ github.sha }}/results/p6_confirmatory
+
+            — emergent-constraint-marl automated notification
