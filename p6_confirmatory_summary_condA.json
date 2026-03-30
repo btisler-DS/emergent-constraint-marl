@@ -1,0 +1,17 @@
+{
+  "protocol": "P6_confirmatory",
+  "preregistration_doi": "10.5281/zenodo.19297509",
+  "total_runs": 50,
+  "conditions": [
+    {
+      "condition": "A",
+      "field_formed_count": 0,
+      "field_saturated_count": 0,
+      "field_collapsed_count": 0,
+      "mean_entropy_sss_correlation": -0.6391,
+      "mean_final_reward_A": 30.8944,
+      "mean_final_query_rate": 0.782,
+      "n_seeds": 50
+    }
+  ]
+}

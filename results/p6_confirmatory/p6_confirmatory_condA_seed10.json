@@ -1,0 +1,1 @@
+{"condition": "A", "seed": 10, "elapsed_s": 3163.2, "field_formed": false, "field_saturated": false, "field_collapsed": false, "entropy_sss_correlation": -0.744, "final_field_mean": 0.246077, "final_field_std": 0.020866, "final_avg_reward_A": 28.508151, "final_avg_reward_B": 35.162921, "final_avg_reward_C": 25.309798, "final_query_rate": 0.809896}
