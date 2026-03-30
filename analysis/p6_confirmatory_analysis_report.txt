@@ -1,0 +1,50 @@
+======================================================================
+PROTOCOL 6 CONFIRMATORY STATISTICAL ANALYSIS
+Preregistration DOI: 10.5281/zenodo.19297509
+Alpha: 0.05  |  N per condition: 50
+======================================================================
+
+DESCRIPTIVE STATISTICS
+----------------------------------------------------------------------
+Condition     mean_reward_A  mean_query_rate  mean_entropy_sss  field_collapsed
+  A                 30.8944           0.7820           -0.6391                0/50
+  B                 26.7844           0.7695           -0.5816                0/50
+  C                 29.5402           0.7839            0.0000               50/50
+  D                 38.9288           0.3053            0.0000               50/50
+
+HYPOTHESIS TESTS
+----------------------------------------------------------------------
+
+H1
+  H1: entropy_sss_correlation(A) < entropy_sss_correlation(C) [A more negative = stronger field structuring]
+  Mann-Whitney U=50.0, p=0.000000, r=0.9600  * SUPPORTED
+  mean(A)=-0.6391  mean(B)=0.0000
+
+H2a
+  H2a: reward_A(A) < reward_A(D) [constraint overhead vs unconstrained]
+  Mann-Whitney U=245.0, p=0.000000, r=0.8040  * SUPPORTED
+  mean(A)=30.8944  mean(B)=38.9288
+
+H2b
+  H2b: reward_A(A) > reward_A(C) [emergent > fixed constraint efficiency]
+  Mann-Whitney U=1466.0, p=0.068690, r=-0.1728    not supported
+  mean(A)=30.8944  mean(B)=29.5402
+
+H3
+  H3: Var(query_rate, A) > Var(query_rate, B) [local > global field heterogeneity]
+  Levene W=1.4437, p=0.232434    not supported
+  Var(A)=0.027798  Var(B)=0.042204  ratio=0.6587
+
+MECHANISTIC PREDICTION
+  Mechanistic: entropy_sss_correlation(A) < 0 [temporal coupling: high entropy suppresses SSS]
+  Wilcoxon W=3.0, p=0.000000  * SUPPORTED
+  median=-0.6797  mean=-0.6391
+
+H4 (BEHAVIORAL DIFFERENTIATION)
+  H4: std(query_rate) ordering: A > B > C ~ D
+  std_A=0.166728  std_B=0.205435  std_C=0.187955  std_D=0.237388
+  A>B: False  B>C: True    not supported
+
+======================================================================
+SUMMARY: 3/6 tests supported at alpha=0.05
+======================================================================

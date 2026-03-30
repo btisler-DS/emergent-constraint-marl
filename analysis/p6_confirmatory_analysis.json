@@ -1,0 +1,115 @@
+{
+  "protocol": "P6_confirmatory",
+  "preregistration_doi": "10.5281/zenodo.19297509",
+  "alpha": 0.05,
+  "n_per_condition": 50,
+  "H1": {
+    "U": 50.0,
+    "p": 0.0,
+    "r": 0.96,
+    "n1": 50,
+    "n2": 50,
+    "mean_a": -0.6391,
+    "mean_b": 0.0,
+    "hypothesis": "H1: entropy_sss_correlation(A) < entropy_sss_correlation(C) [A more negative = stronger field structuring]",
+    "supported": true
+  },
+  "H2": {
+    "H2a": {
+      "U": 245.0,
+      "p": 0.0,
+      "r": 0.804,
+      "n1": 50,
+      "n2": 50,
+      "mean_a": 30.8944,
+      "mean_b": 38.9288,
+      "hypothesis": "H2a: reward_A(A) < reward_A(D) [constraint overhead vs unconstrained]",
+      "supported": true
+    },
+    "H2b": {
+      "U": 1466.0,
+      "p": 0.06869,
+      "r": -0.1728,
+      "n1": 50,
+      "n2": 50,
+      "mean_a": 30.8944,
+      "mean_b": 29.5402,
+      "hypothesis": "H2b: reward_A(A) > reward_A(C) [emergent > fixed constraint efficiency]",
+      "supported": false
+    }
+  },
+  "H3": {
+    "W": 1.4437,
+    "p": 0.232434,
+    "var_a": 0.027798,
+    "var_b": 0.042204,
+    "var_ratio": 0.6587,
+    "hypothesis": "H3: Var(query_rate, A) > Var(query_rate, B) [local > global field heterogeneity]",
+    "direction_supported": false,
+    "supported": false
+  },
+  "mechanistic": {
+    "W": 3.0,
+    "p": 0.0,
+    "median": -0.6797,
+    "mean": -0.6391,
+    "hypothesis": "Mechanistic: entropy_sss_correlation(A) < 0 [temporal coupling: high entropy suppresses SSS]",
+    "supported": true
+  },
+  "H4": {
+    "hypothesis": "H4: std(query_rate) ordering: A > B > C \u2248 D",
+    "std_A": 0.166728,
+    "std_B": 0.205435,
+    "std_C": 0.187955,
+    "std_D": 0.237388,
+    "A_gt_B": false,
+    "B_gt_C": true,
+    "supported": false
+  },
+  "descriptives": {
+    "A": {
+      "mean_entropy_sss_correlation": -0.6391,
+      "std_entropy_sss_correlation": 0.2326,
+      "mean_final_reward_A": 30.8944,
+      "std_final_reward_A": 5.1344,
+      "mean_query_rate": 0.782,
+      "std_query_rate": 0.1667,
+      "mean_final_field_mean": 0.2384,
+      "field_collapsed_count": 0,
+      "field_formed_count": 0
+    },
+    "B": {
+      "mean_entropy_sss_correlation": -0.5816,
+      "std_entropy_sss_correlation": 0.2834,
+      "mean_final_reward_A": 26.7844,
+      "std_final_reward_A": 8.4059,
+      "mean_query_rate": 0.7695,
+      "std_query_rate": 0.2054,
+      "mean_final_field_mean": 0.2385,
+      "field_collapsed_count": 0,
+      "field_formed_count": 0
+    },
+    "C": {
+      "mean_entropy_sss_correlation": 0.0,
+      "std_entropy_sss_correlation": 0.0,
+      "mean_final_reward_A": 29.5402,
+      "std_final_reward_A": 5.2075,
+      "mean_query_rate": 0.7839,
+      "std_query_rate": 0.188,
+      "mean_final_field_mean": 0.0,
+      "field_collapsed_count": 50,
+      "field_formed_count": 0
+    },
+    "D": {
+      "mean_entropy_sss_correlation": 0.0,
+      "std_entropy_sss_correlation": 0.0,
+      "mean_final_reward_A": 38.9288,
+      "std_final_reward_A": 4.0646,
+      "mean_query_rate": 0.3053,
+      "std_query_rate": 0.2374,
+      "mean_final_field_mean": 0.0,
+      "field_collapsed_count": 50,
+      "field_formed_count": 0
+    }
+  }
+}
