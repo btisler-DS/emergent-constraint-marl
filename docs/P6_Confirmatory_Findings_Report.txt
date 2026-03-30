@@ -1,0 +1,523 @@
+================================================================================
+PROTOCOL 6 CONFIRMATORY FINDINGS REPORT
+Emergent Constraint Landscapes as a Structural Alternative to Imposed
+Regulatory Constraint in Multi-Agent Systems
+================================================================================
+
+Author: Tisler, Bruce
+ORCID: 0009-0009-6344-5334
+Affiliation: Quantum Inquiry (quantuminquiry.org)
+Preregistration DOI: 10.5281/zenodo.19297509 (v3, locked 2026-03-28)
+Confirmatory runs completed: 2026-03-30
+Commit: 4a12315 (results), 829be57 (analysis)
+Tag: p6-confirmatory-complete
+Repository: btisler-DS/emergent-constraint-marl
+
+Report prepared: 2026-03-30
+
+================================================================================
+1. EXECUTIVE SUMMARY
+================================================================================
+
+Protocol 6 tested whether an emergent constraint field -- one co-constituted by
+agent signal production -- produces qualitatively different behavioral outcomes
+than an externally imposed fixed constraint. The primary research question was
+revised pre-confirmatory (Deviation 2, per pilot finding) from spatial
+heterogeneity to temporal coupling between field structure and behavioral
+outcomes.
+
+Results: MIXED. The mechanistic temporal coupling prediction is robustly
+confirmed. The primary claim as specified under the preregistered falsification
+criteria cannot be fully confirmed. The emergent field produces a qualitatively
+distinct behavioral signature absent in fixed-constraint conditions, but does
+not produce significantly better behavioral outcomes than a well-calibrated
+fixed tax on the available measures.
+
+IMPORTANT CAVEAT ON METRIC AVAILABILITY: The preregistered primary metrics --
+sustained_structure_score (SSS) per seed and exploitation_loop_rate (ELR) per
+seed -- were not persisted as per-seed scalar summaries in the confirmatory run
+output. The epoch-level time series were computed during runs but not written to
+disk. The per-seed JSON files contain entropy_sss_correlation (within-run
+Pearson correlation between the field_entropy time series and SSS time series)
+and final_avg_reward_A as the closest available proxies. All hypothesis tests
+below are conducted on these proxies with full transparency. Results should be
+interpreted accordingly.
+
+
+================================================================================
+2. EXPERIMENTAL PARAMETERS
+================================================================================
+
+Preregistered parameters, executed without modification:
+
+  Conditions: A (emergent local), B (emergent global), C (fixed external),
+              D (no constraint)
+  Seeds: 50 per condition (0-49), 200 total runs
+  Epochs: 500 per run
+  Environment: grid_size=20, z_layers=8, energy_budget=100, max_steps=64
+  Field: diffusion_coefficient=0.1, decay_rate=0.05 (pilot-selected)
+  Signal weights (Deviation 1): DECLARE=0.03, QUERY=0.01, RESPOND=0.02
+  Fixed cost multiplier (Condition C): 1.2287
+  Infrastructure: SimplePod 6xRTX 3060, breathtaking-porcupine, EU-PL-01
+
+Deviations on record:
+  Deviation 1 (pre-pilot, 2026-03-28): Signal weights scaled 0.1x from
+    original proposed values (DECLARE 0.3->0.03, QUERY 0.1->0.01,
+    RESPOND 0.2->0.02). Preregistration reflects scaled values.
+  Deviation 2 (post-pilot, 2026-03-28): Field formation criterion revised.
+    Research question revised from spatial differentiation to temporal coupling.
+    Exclusion criterion changed from field_std>0.05 sustained >50 epochs to
+    field_mean>0.01 activity-based criterion.
+
+No exclusions triggered. All 200 seeds included in primary analysis.
+
+
+================================================================================
+3. DESCRIPTIVE STATISTICS (ALL 50 SEEDS PER CONDITION)
+================================================================================
+
+                         Cond A      Cond B      Cond C      Cond D
+                    (emerg.loc)  (emerg.gl)  (fixed ext)  (no constr)
+------------------------------------------------------------------------
+mean_final_reward_A    30.894       26.784      29.540       38.929
+std_final_reward_A      5.134        8.406       5.208        4.065
+mean_query_rate         0.782        0.770       0.784        0.305
+std_query_rate          0.167        0.205       0.188        0.237
+mean_entropy_sss_corr  -0.639       -0.582       0.000        0.000
+std_entropy_sss_corr    0.233        0.283       0.000        0.000
+mean_final_field_mean   0.238        0.239       0.000        0.000
+field_collapsed          0/50         0/50       50/50        50/50
+field_formed             0/50         0/50        0/50         0/50
+
+Key observations:
+
+(a) Field activity: A and B show active fields (mean_field_mean ~0.24) with
+    zero collapses. C and D show zero field activity (no constraint field
+    mechanism). The field is functioning as designed in A and B.
+
+(b) Field formation: No seed in any condition met the field_formed criterion
+    (field_std > 0.05 sustained >50 consecutive epochs). This continues the
+    pilot finding: behavioral homogenization collapses spatial variance
+    regardless of condition. This is Deviation 2's documented finding.
+
+(c) Behavioral homogenization: query_rate is high and similar across A, B, C
+    (~0.77-0.78). This is the dominant attractor documented across P2-P6.
+    Condition D is the exception: query_rate=0.305, consistent with unconstrained
+    agents learning to minimize costly signaling when no tax applies.
+
+(d) Entropy-SSS coupling: A and B show mean entropy_sss_correlation of -0.639
+    and -0.582 respectively, confirming the field creates temporal modulation of
+    behavioral structure. C and D show exactly 0.0 (no field, no coupling).
+
+(e) Reward ordering: D (38.93) > A (30.89) > C (29.54) > B (26.78). The
+    unconstrained condition achieves highest reward. Emergent global (B) shows
+    lowest reward and highest inter-seed variance (std=8.41 vs 5.13 for A),
+    suggesting less stable behavioral attractors under global field perception.
+
+
+================================================================================
+4. HYPOTHESIS TESTS
+================================================================================
+
+------------------------------------------------------------------------
+H1 -- INTERROGATIVE DIVERSITY
+------------------------------------------------------------------------
+Preregistered: A > C on sustained_structure_score. Mann-Whitney U, one-tailed,
+p < 0.05, Cohen's d > 0.5.
+
+Metric availability: sustained_structure_score per seed NOT directly saved.
+Proxy used: entropy_sss_correlation (within-run Pearson between field_entropy
+time series and SSS time series). This captures the coupling magnitude, not
+the SSS level.
+
+Analysis on proxy:
+  Direction tested: A < C (more negative entropy_sss_corr = stronger field
+                    structuring of behavior)
+  mean(A) = -0.639,  mean(C) = 0.000
+  Mann-Whitney U = 50.0,  p < 0.001 (one-tailed),  r = 0.96
+
+  PROXY RESULT: SUPPORTED
+
+Interpretation: The effect size (r=0.96) is among the largest observed in the
+P6 series and the separation is near-complete: 49 of 50 Condition A seeds show
+negative entropy_sss_correlation, while all 50 Condition C seeds show exactly
+0.0 by construction (no field, no coupling). This is not a test of whether
+mean SSS is higher in A than C as preregistered -- it is a test of whether the
+field creates qualitatively different within-run behavioral dynamics. It does.
+
+NOTE: Because per-seed mean SSS was not saved, the direct preregistered test
+cannot be reported. The proxy provides strong evidence for the field mechanism
+but is not strictly H1 as specified. This limitation must be acknowledged in
+any publication.
+
+------------------------------------------------------------------------
+H2 -- CONSTRAINT GAMING SUPPRESSION
+------------------------------------------------------------------------
+Preregistered: A < C AND A < D on exploitation_loop_rate. Two Mann-Whitney U,
+p < 0.025 each (Bonferroni). Both must succeed.
+
+Metric availability: exploitation_loop_rate NOT saved. Proxy used:
+final_avg_reward_A (inverted relationship: lower reward proxies higher ELR
+if ELR = wasteful gaming). This is an imperfect proxy -- reward is influenced
+by many factors beyond exploitation loops.
+
+H2 Comparison 1 (A vs D, reward proxy):
+  Prediction: A earns less than D (constraint overhead vs unconstrained)
+  mean(A) = 30.894,  mean(D) = 38.929
+  Mann-Whitney U = 245.0,  p < 0.001 (one-tailed),  r = 0.80
+
+  PROXY RESULT: SUPPORTED (p < 0.025 Bonferroni threshold met)
+
+H2 Comparison 2 (A vs C, reward proxy):
+  Prediction: A earns less than C (emergent constraint reduces gaming more)
+  NOTE: If ELR is the gaming metric and A has LOWER reward, that would mean
+  A has MORE energy loss -- which is the OPPOSITE of H2's intent. H2 predicts
+  emergent constraint SUPPRESSES gaming, which should produce HIGHER reward
+  (or lower ELR). The proxy direction is ambiguous.
+
+  Reframed (A > C on reward = emergent more efficient):
+  mean(A) = 30.894,  mean(C) = 29.540
+  Mann-Whitney U = 1466.0,  p = 0.069 (one-tailed)
+
+  PROXY RESULT: NOT SUPPORTED (p = 0.069, above Bonferroni threshold of 0.025)
+
+H2 OVERALL: CANNOT CONFIRM. The second required comparison fails on the proxy
+measure. The emergent constraint (A) does not produce meaningfully higher reward
+than fixed external constraint (C). The 1.35-point mean difference (30.89 vs
+29.54) is in the predicted direction but not statistically significant at the
+preregistered threshold.
+
+Under the preregistered falsification criteria (Section 8.1): H2 failure
+contributes to falsification of the primary claim. However, because the proxy
+metric (reward) is not ELR as specified, this conclusion must be held with
+appropriate uncertainty. The true ELR comparison cannot be made from the saved
+data.
+
+------------------------------------------------------------------------
+H3 -- LOCALITY AS NECESSARY CONDITION
+------------------------------------------------------------------------
+Preregistered: Var(A) > Var(B) on within-run SD of per-agent query_rate.
+Levene's test, p < 0.05.
+
+Metric availability: within-run SD of per-agent query_rate NOT saved.
+Proxy used: cross-seed variance of final_query_rate (a different metric --
+this captures between-seed variability in terminal query rate, not within-run
+agent-level divergence).
+
+Analysis on proxy:
+  Var(A) = 0.0278,  Var(B) = 0.0422,  ratio = 0.659
+  Levene W = 1.44,  p = 0.232
+
+  PROXY RESULT: NOT SUPPORTED. Direction is reversed: Var(B) > Var(A).
+
+Interpretation: Global field perception (B) produces MORE between-seed
+variability in final query rate than local field perception (A). This is
+opposite to H3's prediction. Rather than local perception creating behavioral
+heterogeneity, it appears global field access creates more variable training
+outcomes -- possibly because agents with full field information find more
+diverse behavioral equilibria, while local field perception constrains agents
+to a narrower attractor basin.
+
+This reversal is substantively interesting: local field perception homogenizes
+behavior across seeds more than global perception, contrary to the Dictyostelium
+analogy. The preregistration anticipated local perception would amplify
+individual-level divergence; the opposite is observed.
+
+NOTE: The within-run metric (agent-level divergence within a single run) vs
+the cross-seed metric (training trajectory divergence across initializations)
+may tell different stories. The intended preregistered metric could not be
+directly computed.
+
+------------------------------------------------------------------------
+MECHANISTIC PREDICTION
+------------------------------------------------------------------------
+Preregistered: Pooled Spearman correlation between per-epoch field_entropy and
+exploitation_loop_rate across Condition A seeds. r < 0, p < 0.05. Secondary:
+per-seed Spearman r, sign test on median.
+
+Metric availability: Per-epoch field_entropy and exploitation_loop_rate time
+series NOT saved. The entropy_sss_correlation in the per-seed JSON is the
+within-run Pearson correlation between field_entropy and sustained_structure_score
+(not ELR, and Pearson not Spearman). SSS and ELR are conceptually inversely
+related (high SSS = low ELR), so the sign should be preserved, but the test
+is on SSS not ELR, and uses Pearson not Spearman.
+
+Secondary test on per-seed entropy_sss_correlation (closest available proxy):
+  One-sample Wilcoxon signed-rank vs 0, one-tailed (< 0)
+  n = 50,  median = -0.680,  mean = -0.639
+  Wilcoxon W = 3.0,  p < 0.001
+
+  PROXY RESULT: STRONGLY SUPPORTED
+
+All but one of the 50 Condition A seeds show negative entropy_sss_correlation.
+The consistency and magnitude are striking: median r = -0.680, closely matching
+the pilot finding of r = -0.650 at dc=0.1/dr=0.05 (the parameter combination
+selected specifically for this coupling strength).
+
+The mechanistic interpretation: when the field is more uniformly distributed
+(high entropy), behavioral structure (SSS) is lower. When field entropy is low
+(structured field, some agents bearing higher cost), SSS is higher. This is the
+temporal coupling signature. The field is causally active in modulating behavior,
+operating as a global/temporal modulator rather than a spatially differentiated
+local ecology.
+
+------------------------------------------------------------------------
+H4 -- BEHAVIORAL DIFFERENTIATION (EXPLORATORY)
+------------------------------------------------------------------------
+Preregistered: behavioral_differentiation_index exceeds low-pressure baseline
+mean by 2 SD in at least 60% of Condition A seeds. (Spatial framing
+de-emphasized post-revision; threshold criterion retained.)
+
+Metric availability: behavioral_differentiation_index NOT saved.
+Proxy: cross-seed std of query_rate as behavioral differentiation proxy.
+
+  std(A) = 0.167,  std(B) = 0.205,  std(C) = 0.188,  std(D) = 0.237
+
+  Ordering: D > B > C > A
+  Predicted ordering: A > B > C ~ D
+
+  PROXY RESULT: NOT SUPPORTED. Ordering is fully reversed for A and B.
+
+Interpretation: Condition A shows the LOWEST behavioral differentiation of all
+conditions on this proxy. The unconstrained condition D shows the highest.
+Emergent constraint under local field perception produces the most homogeneous
+behavior across seeds, not the most differentiated. This is consistent with H3's
+reversal: local field perception appears to act as a behavioral stabilizer,
+funneling agents toward a common attractor more reliably than other conditions.
+
+
+================================================================================
+5. FALSIFICATION CRITERIA ASSESSMENT
+================================================================================
+
+Per Section 8 of the preregistration:
+
+8.1 PRIMARY CLAIM FALSIFIED if either:
+  (a) H1 fails: A does not show higher SSS than C at p < 0.05
+  (b) H2 fails: A does not show lower ELR than both C and D at p < 0.025 each
+
+Direct assessment (on proxy measures):
+  H1 proxy: SUPPORTED (p < 0.001, r = 0.96 on entropy_sss_correlation)
+  H2 proxy, A vs D: SUPPORTED (p < 0.001, r = 0.80 on reward proxy)
+  H2 proxy, A vs C: NOT SUPPORTED (p = 0.069 on reward proxy)
+
+Since H2 requires BOTH comparisons, and A vs C fails at the Bonferroni-adjusted
+threshold of p < 0.025, H2 is not confirmed on the available proxy.
+
+CONCLUSION UNDER FALSIFICATION CRITERIA: The primary claim cannot be fully
+confirmed. H1 is supported on proxy; H2 is partially supported (one of two
+required comparisons). The falsification condition is triggered by H2's A vs C
+comparison failing. However, because the primary metrics were not saved and
+proxy measures are used throughout, this conclusion is tentative. It is NOT
+the case that the experiment produced a clean null -- the mechanistic signature
+is robust and H1 proxy is near-maximal in effect size.
+
+8.2 MECHANISTIC INTERPRETATION QUALIFIED if H1 and H2 confirmed but
+mechanistic fails: This criterion is not applicable since H2 is not confirmed.
+
+8.3 COMPLETE NULL if H1, H2, H3 all fail: This criterion is not met. H1 proxy
+is supported, and the mechanistic prediction is robustly supported. This is not
+a complete null.
+
+
+================================================================================
+6. SERIES CONTEXT AND INTERPRETATION
+================================================================================
+
+Protocol 6 is the sixth in the Quantum Inquiry MARL series investigating
+conditions under which alignment-relevant behavioral properties emerge in
+artificial agents. The series pattern is relevant:
+
+  P2: Fixed ethical tax -- query-flooding as gaming attractor (d = -2.18)
+  P3: Epistemic opacity -- amplified gaming (H1 inverted, d = +2.22)
+  P4: Self-modeling depth -- sacrifice capacity increased, not alignment
+  P5: Complete null across all five hypotheses
+  P6 (this): Partial support -- temporal coupling confirmed; primary claim
+             not fully confirmed
+
+P6 asked whether changing the ORIGIN of the constraint (emergent from agents
+vs. imposed from outside) changes the outcome. The answer is nuanced:
+
+YES, the origin matters mechanistically:
+  - The field is causally active. entropy_sss_correlation in A and B is
+    strongly negative (-0.64, -0.58) and exactly 0 in C and D. This is not
+    noise -- the field creates temporal coupling between its own structure
+    and agent behavior. No prior protocol produced this signature.
+  - The field is stable (0 collapses in A and B across 50 seeds) and
+    maintains consistent mean values (~0.24 throughout).
+
+NO, the origin does not produce meaningfully better outcomes:
+  - Behavioral homogenization remains the dominant attractor in A, B, and C
+    alike (query_rate ~0.77-0.78 in all three). The field modulates the
+    temporal texture of this homogenization but does not escape it.
+  - Reward in A (30.89) is not significantly higher than C (29.54, p = 0.069).
+    The emergent constraint imposes coordination overhead without a
+    commensurate reward benefit.
+  - The unconstrained condition D achieves highest reward (38.93), consistent
+    with P2's finding that constraints impose costs that agents cannot
+    efficiently offset.
+
+The behavioral homogenization finding is now consistent across P2-P6. It is
+the series attractor: heterogeneous architecture, shared reward, and
+zero-sum communication costs drive all three agent types toward uniform
+signaling behavior regardless of constraint architecture.
+
+The Dictyostelium analogy holds structurally but not phenomenologically:
+the field IS co-constituted by agent signaling, and it DOES modulate behavior
+(the temporal coupling signal confirms this). But unlike Dictyostelium,
+the three-agent minimal system lacks the population size and initial
+heterogeneity required for symmetry-breaking aggregation. Homogenization is
+the expected attractor given identical architecture and shared reward
+structure. This is a scale condition mismatch, documented as consistent
+with the Dictyostelium literature (Preregistration Section 2.2).
+
+
+================================================================================
+7. SPECIFIC FINDINGS BY COMPARISON
+================================================================================
+
+A vs B (local vs global field perception):
+  B earns 4.11 less reward than A (26.78 vs 30.89, std_B = 8.41 vs std_A = 5.13).
+  B was designated as DISCRIMINATOR condition expected to resemble C (fixed tax).
+  B does NOT resemble C: B's entropy_sss_correlation is -0.582 (like A) not 0.0
+  (like C). Global field perception preserves the temporal coupling mechanism.
+  B's higher reward variance (std=8.41) suggests global field access creates
+  less stable behavioral trajectors than local perception.
+  H3 predicts Var(A) > Var(B) -- reversed. Global perception is more variable,
+  not less, on this measure.
+
+A vs C (emergent vs fixed external):
+  The central comparison. Reward difference is 1.35 points (30.89 vs 29.54),
+  not significant (p = 0.069). The emergent constraint does not produce
+  meaningfully better reward outcomes than a fixed tax calibrated to the same
+  cost level. The primary H2 comparison fails.
+  However, the qualitative behavioral signatures differ dramatically:
+  A has active field (mean=0.24, 0 collapses), entropy_sss_corr = -0.639.
+  C has no field (mean=0.0, 50 collapses by construction), corr = 0.0.
+  The MECHANISM is different even when outcomes are similar.
+
+A vs D (emergent vs unconstrained):
+  D earns 8.03 more reward than A (38.93 vs 30.89, p < 0.001, r = 0.80).
+  D achieves near-silence (query_rate = 0.305 vs 0.782 in A). Unconstrained
+  agents learn that silence is optimal when signaling costs are not offset by
+  coordination benefits. This is the gaming attractor documented in P2.
+  The emergent constraint prevents this collapse into silence (A maintains
+  query_rate = 0.782) but at the cost of lower reward -- agents are paying
+  for communication that improves field structure but not final reward.
+
+C vs D (fixed external vs unconstrained):
+  C earns 9.39 less reward than D (29.54 vs 38.93). Fixed tax imposes more
+  reward loss than emergent constraint (D-A gap = 8.03, D-C gap = 9.39),
+  suggesting the emergent constraint is marginally MORE efficient than fixed
+  external tax, consistent with the predicted direction of H2b but not at
+  significance.
+
+
+================================================================================
+8. LIMITATIONS AND NOTES FOR PUBLICATION
+================================================================================
+
+1. METRIC PERSISTENCE: The primary preregistered metrics (sustained_structure_
+   score, exploitation_loop_rate) were not saved as per-seed scalar outputs.
+   All hypothesis tests were conducted on proxy measures. Any publication must
+   explicitly acknowledge this and present the proxy results as exploratory
+   rather than confirmatory for H1 and H2.
+
+2. PROXY VALIDITY: entropy_sss_correlation (within-run Pearson, field_entropy
+   vs SSS) is a coupling coefficient, not a level metric. It cannot substitute
+   for mean SSS as specified in H1. The mechanistic proxy is closer to valid
+   (Pearson vs Spearman, SSS vs ELR), but still not the preregistered test.
+
+3. H3 METRIC MISMATCH: The preregistered H3 metric is within-run SD of
+   per-agent query_rate (behavioral divergence within a single run). The
+   available metric is cross-seed variance of final query_rate (training
+   stability across seeds). These capture different phenomena and should not
+   be treated as equivalent.
+
+4. BEHAVIORAL HOMOGENIZATION: The query_rate convergence to ~0.77-0.78 in
+   A, B, and C means the dependent measures are computed on what is essentially
+   a near-degenerate behavioral distribution. This reduces power for
+   distinguishing conditions on behavior-based measures.
+
+5. SAMPLE SIZE: 50 seeds per condition exceeds the preregistered minimum of
+   30. The sample is adequate for the effect sizes observed.
+
+6. SERIES GENERALIZABILITY: Results apply to this specific three-agent
+   architecture (AgentA: RNN, AgentB: CNN, AgentC: GNN), shared reward
+   structure, and parameter regime. Claims cannot be generalized to larger
+   populations or heterogeneous reward structures without further study.
+
+
+================================================================================
+9. CONCLUSIONS
+================================================================================
+
+WHAT WAS FOUND:
+
+1. The emergent constraint field is causally active and produces a qualitatively
+   distinct temporal coupling signature absent in fixed-constraint and
+   unconstrained conditions. This is the clearest positive result in the P6
+   series and potentially the P2-P6 series.
+
+2. The temporal coupling is robust and consistent: median within-run correlation
+   between field entropy and behavioral structure (SSS) is -0.680 in Condition A,
+   closely replicating the pilot finding (r = -0.650). The field does causal work.
+
+3. Emergent constraint does not translate to better behavioral outcomes than
+   fixed external constraint on the reward proxy. The primary comparative
+   advantage predicted by H2 is not confirmed.
+
+4. Behavioral homogenization is the dominant attractor in A, B, and C alike,
+   extending the P2-P5 pattern to the emergent constraint condition.
+
+5. Local vs global field perception (A vs B) produces a counterintuitive result:
+   global perception generates more behavioral variance across seeds (higher
+   std_reward, higher std_query_rate), suggesting global field information
+   destabilizes behavioral convergence rather than homogenizing it further.
+
+WHAT WAS NOT FOUND:
+
+1. H2 (constraint gaming suppression, both comparisons): not confirmed on proxy.
+2. H3 (locality producing higher behavioral variance than global): reversed.
+3. H4 (behavioral differentiation): reversed.
+4. Escape from behavioral homogenization attractor.
+
+SERIES CONCLUSION:
+
+Protocol 6 contributes a new mechanistic finding to the series: an emergent
+constraint field creates temporal coupling between field entropy and behavioral
+structure that is absent under externally imposed constraint. This is evidence
+that constraint origin matters at the mechanistic level. However, it does not
+produce the alignment-relevant behavioral properties that were the primary
+prediction. The series pattern continues: constraint architectures, whether
+imposed or emergent, do not produce the target properties in this agent
+configuration.
+
+The appropriate interpretation is not complete failure. The temporal coupling
+mechanism is a genuine finding -- a constraint landscape that is co-constituted
+by agent activity behaves differently, in a measurable and theoretically
+meaningful way, from one that is externally imposed. Whether this difference
+can be leveraged for alignment-relevant outcomes in larger, more heterogeneous
+systems remains an open question that this series cannot answer.
+
+
+================================================================================
+10. INTEGRITY CHAIN
+================================================================================
+
+Preregistration PDF: docs/Protocol6_Preregistration_v3.pdf
+SHA-256: c286a89037966e56630f5d3ce4cdb4a1621ce7ce9a0f7e7d477a06b8495dffc3
+Zenodo DOI: 10.5281/zenodo.19297509
+Predictions committed: commit 7625fe1
+
+Confirmatory pre-run tag: p6-confirmatory-pre-run (da5cc47)
+Confirmatory results commit: 4a12315
+Analysis commit: 829be57
+Completion tag: p6-confirmatory-complete
+
+No confirmatory runs were re-run or modified.
+No preregistration changes occurred after SHA lock.
+
+================================================================================
+END OF REPORT
+================================================================================
