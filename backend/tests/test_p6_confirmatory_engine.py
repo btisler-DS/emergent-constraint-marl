@@ -141,3 +141,49 @@ def test_condition_c_higher_reward_cost_than_d():
     avg_c = np.mean([e["avg_reward_A"] for e in res_c])
     avg_d = np.mean([e["avg_reward_A"] for e in res_d])
     assert avg_c < avg_d, "Condition C (fixed tax) should produce lower rewards than D (no tax)"
+
+
+# ── SSS / ELR presence in epoch series ────────────────────────────────────
+
+def test_epoch_series_contains_sss():
+    """sustained_structure_score must be present in every epoch dict."""
+    eng = P6ConfirmatoryEngine(_fast_config(), condition="A", fixed_cost_multiplier=FIXED_MULTIPLIER)
+    result = eng.run()
+    for ep in result:
+        assert "sustained_structure_score" in ep, "sustained_structure_score missing from epoch"
+        assert isinstance(ep["sustained_structure_score"], float)
+
+
+def test_epoch_series_contains_elr():
+    """exploitation_loop_rate must be present in every epoch dict."""
+    eng = P6ConfirmatoryEngine(_fast_config(), condition="A", fixed_cost_multiplier=FIXED_MULTIPLIER)
+    result = eng.run()
+    for ep in result:
+        assert "exploitation_loop_rate" in ep, "exploitation_loop_rate missing from epoch"
+        assert isinstance(ep["exploitation_loop_rate"], float)
+
+
+def test_sss_and_elr_present_all_conditions():
+    """SSS and ELR must be present for all four conditions."""
+    for cond in ("A", "B", "C", "D"):
+        eng = P6ConfirmatoryEngine(_fast_config(), condition=cond, fixed_cost_multiplier=FIXED_MULTIPLIER)
+        result = eng.run()
+        assert "sustained_structure_score" in result[-1], f"SSS missing for condition {cond}"
+        assert "exploitation_loop_rate" in result[-1], f"ELR missing for condition {cond}"
+
+
+def test_sss_range():
+    """sustained_structure_score must be non-negative."""
+    eng = P6ConfirmatoryEngine(_fast_config(), condition="A", fixed_cost_multiplier=FIXED_MULTIPLIER)
+    result = eng.run()
+    for ep in result:
+        assert ep["sustained_structure_score"] >= 0.0, "SSS must be non-negative"
+
+
+def test_elr_is_float():
+    """exploitation_loop_rate must be a finite float (can be negative when diversity > 1.0 nat)."""
+    eng = P6ConfirmatoryEngine(_fast_config(), condition="A", fixed_cost_multiplier=FIXED_MULTIPLIER)
+    result = eng.run()
+    for ep in result:
+        assert isinstance(ep["exploitation_loop_rate"], float)
+        assert ep["exploitation_loop_rate"] <= 1.0, "ELR must be at most 1.0"

@@ -89,10 +89,14 @@ def run_one(
 
     entropies = [e["field_entropy"] for e in epoch_series]
     sss_scores = [e["sustained_structure_score"] for e in epoch_series]
+    elr_scores = [e["exploitation_loop_rate"] for e in epoch_series]
+
     if len(set(entropies)) > 1 and len(set(sss_scores)) > 1:
         corr = float(np.corrcoef(entropies, sss_scores)[0, 1])
     else:
         corr = 0.0
+
+    window = min(20, len(sss_scores))
 
     return {
         "condition": condition,
@@ -102,6 +106,17 @@ def run_one(
         "field_saturated": run_summary["field_saturated"],
         "field_collapsed": run_summary["field_collapsed"],
         "entropy_sss_correlation": round(corr, 4),
+        # SSS scalars — primary metric for H1
+        "mean_sss": round(float(np.mean(sss_scores)), 6),
+        "final_sss": round(sss_scores[-1], 6),
+        "sss_window20": round(float(np.mean(sss_scores[-window:])), 6),
+        # ELR scalars — primary metric for H2
+        "mean_elr": round(float(np.mean(elr_scores)), 6),
+        "final_elr": round(elr_scores[-1], 6),
+        "elr_window20": round(float(np.mean(elr_scores[-window:])), 6),
+        # Full time series for post-hoc mechanistic analysis
+        "sss_series": [round(v, 6) for v in sss_scores],
+        "elr_series": [round(v, 6) for v in elr_scores],
         "final_field_mean": round(epoch_series[-1]["field_mean"], 6),
         "final_field_std": round(epoch_series[-1]["field_std"], 6),
         "final_avg_reward_A": round(epoch_series[-1]["avg_reward_A"], 6),
@@ -203,12 +218,20 @@ def main() -> None:
         mean_corr = float(np.mean([r["entropy_sss_correlation"] for r in runs]))
         mean_final_reward_A = float(np.mean([r["final_avg_reward_A"] for r in runs]))
         mean_final_query_rate = float(np.mean([r["final_query_rate"] for r in runs]))
+        mean_sss = float(np.mean([r["mean_sss"] for r in runs]))
+        mean_elr = float(np.mean([r["mean_elr"] for r in runs]))
+        mean_sss_window20 = float(np.mean([r["sss_window20"] for r in runs]))
+        mean_elr_window20 = float(np.mean([r["elr_window20"] for r in runs]))
         condition_summaries.append({
             "condition": condition,
             "field_formed_count": formed_count,
             "field_saturated_count": saturated_count,
             "field_collapsed_count": collapsed_count,
             "mean_entropy_sss_correlation": round(mean_corr, 4),
+            "mean_sss": round(mean_sss, 6),
+            "mean_elr": round(mean_elr, 6),
+            "mean_sss_window20": round(mean_sss_window20, 6),
+            "mean_elr_window20": round(mean_elr_window20, 6),
             "mean_final_reward_A": round(mean_final_reward_A, 4),
             "mean_final_query_rate": round(mean_final_query_rate, 4),
             "n_seeds": len(runs),
