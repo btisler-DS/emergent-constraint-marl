@@ -1,0 +1,550 @@
+================================================================================
+PROTOCOL 6 CONFIRMATORY — AI COMMITTEE PREDICTION SCORING REPORT
+================================================================================
+
+Preregistration DOI: 10.5281/zenodo.19297509
+Predictions committed: commit 7625fe1
+Confirmatory results commit: 4a12315 (results), 829be57 (analysis)
+Scoring date: 2026-03-30
+
+Committee members: ChatGPT, Gemini, Grok, DeepSeek, Claude (experiment manager)
+
+SCORING KEY:
+  CORRECT   — Prediction matches actual outcome (direction and threshold)
+  INCORRECT — Prediction does not match actual outcome
+  PARTIAL   — Direction correct, magnitude or threshold missed
+  QUALIFIED — Correct on statistical outcome but mechanism/framing differs
+  N/A       — Cannot evaluate with available proxy data
+
+IMPORTANT NOTE ON METRIC AVAILABILITY:
+The preregistered primary metrics (sustained_structure_score per seed,
+exploitation_loop_rate per seed) were not persisted in run output. All H1 and
+H2 tests are on proxy measures: entropy_sss_correlation (for H1), final_avg_
+reward_A (for H2). H3 was tested on cross-seed variance of final_query_rate
+rather than within-run SD of per-agent query_rate. Scores are assigned on proxy
+results with this caveat noted where it matters.
+
+================================================================================
+ACTUAL RESULTS (PROXY-BASED)
+================================================================================
+
+H1 proxy (entropy_sss_corr A < C):  SUPPORTED     p < 0.001, r = 0.96
+H2a (reward A < D):                 SUPPORTED     p < 0.001, r = 0.80
+H2b (reward A > C):                 NOT SUPPORTED p = 0.069
+H2 overall (both required):         FAILS
+H3 (Var(A) > Var(B), query_rate):   NOT SUPPORTED p = 0.232, Var(B) > Var(A)
+Mechanistic (entropy_sss_corr < 0): SUPPORTED     p < 0.001, median = -0.680
+H4 (BDI threshold):                 NOT SUPPORTED std ordering reversed
+Primary claim (H1 + H2 both):       NOT FULLY CONFIRMED
+
+Descriptive:
+  mean_query_rate: A=0.782, B=0.770, C=0.784, D=0.305
+  field_collapsed:  A=0/50, B=0/50, C=50/50, D=50/50
+  mean_reward_A:    A=30.89, B=26.78, C=29.54, D=38.93
+
+
+================================================================================
+CHATGPT — PREDICTION SCORING
+================================================================================
+
+Submitted prediction summary:
+  H1:           FAIL
+  H2:           FAIL (A < C yes; A < D no — both required, overall fails)
+  H3:           FAIL
+  Mechanistic:  PASS, qualified (r in -0.20 to -0.50)
+  H4:           FAIL
+  Bottom line:  Primary claim falsified; mechanistic passes
+
+--- SCORING ---
+
+H1 — Predicted: FAIL (small positive difference, insufficient effect)
+     Actual:    Proxy SUPPORTED (p < 0.001, r = 0.96, near-complete separation)
+     Score:     INCORRECT
+     Note: ChatGPT anticipated A > C directionally but insufficient to confirm.
+           The proxy effect is massive, not marginal. However, the proxy
+           (entropy_sss_correlation) is a coupling coefficient, not the SSS
+           level H1 requires. If the direct SSS test had been run, ChatGPT's
+           skepticism may have been partially warranted. On the proxy as
+           tested: wrong.
+
+H2 — Predicted: FAIL overall; A < C on ELR yes, A < D on ELR no
+     Actual:    H2 FAILS overall. BUT direction is reversed: A < D is supported
+                (p < 0.001); A < C is not supported (p = 0.069).
+                ChatGPT predicted the wrong comparison would pass.
+     Score:     PARTIAL
+     Note: Correctly predicted H2 fails overall. Incorrectly predicted WHICH
+           comparison would succeed. ChatGPT thought A < C would be the easier
+           result; in fact A < D was easier (unconstrained earns significantly
+           more). ChatGPT's framing ("A looks better than fixed external
+           baseline") was directionally wrong.
+
+H3 — Predicted: FAIL (p ≥ 0.05; A and B wash out over 500 epochs)
+     Actual:    NOT SUPPORTED (p = 0.232); direction reversed (Var(B) > Var(A))
+     Score:     CORRECT
+     Note: Got the outcome right. The specific mechanism predicted (directional
+           difference washing out) is partially consistent with data, though
+           the reversal of direction was not predicted.
+
+Mechanistic — Predicted: PASS, r in -0.20 to -0.50 (moderate negative)
+              Actual:    STRONGLY SUPPORTED, median r = -0.680 (above predicted range)
+     Score:     PARTIAL
+     Note: Correct direction and confirmation. Underestimated magnitude.
+           ChatGPT predicted attenuation from the pilot's -0.650; the actual
+           result strengthened (median -0.680, mean -0.639). The per-seed
+           sensitivity analysis aligns with the sign test being the right
+           instrument (as noted in the preregistration).
+
+H4 — Predicted: FAIL
+     Actual:    NOT SUPPORTED
+     Score:     CORRECT
+
+Bottom line — Predicted: Primary claim falsified; mechanistic passes
+              Actual:    Primary claim not fully confirmed; mechanistic strongly
+                         confirmed
+     Score:     CORRECT
+
+CHATGPT SCORECARD:
+  H1:           INCORRECT
+  H2 outcome:   CORRECT (fails)
+  H2 mechanism: INCORRECT (wrong comparison succeeds)
+  H3:           CORRECT
+  Mechanistic:  PARTIAL (direction correct, magnitude underestimated)
+  H4:           CORRECT
+  Bottom line:  CORRECT
+
+Summary: 3.5/6 correct (counting partial as 0.5). Best prediction: overall
+outcome of falsification + mechanistic pass. Key miss: H1 proxy strength,
+and which H2 comparison would survive.
+
+
+================================================================================
+GEMINI — PREDICTION SCORING
+================================================================================
+
+Submitted prediction summary:
+  H1: Supported (A > C on SSS, p < 0.05, Cohen's d ≥ 0.8)
+  H2: A < D supported (field creates cost gradient suppressing repetitive loops)
+  H3: Supported (SD_A > SD_B, p < 0.05)
+  Mechanistic: r in -0.45 to -0.80 (Pearson, field_entropy vs SSS)
+  H4: Bimodal distribution (stalk vs. spore dynamic)
+  Additional: 70%+ of A seeds trend toward homogenization by epoch 200+;
+              alignment phase longer in A than other conditions
+
+--- SCORING ---
+
+H1 — Predicted: Supported (d ≥ 0.8)
+     Actual:    Proxy SUPPORTED (r = 0.96, large effect)
+     Score:     CORRECT
+     Note: Gemini was the most bullish on H1 among skeptics. The proxy effect
+           is consistent with the large effect size predicted. Effect size
+           cannot be computed as Cohen's d on the proxy (binary vs continuous
+           distributions), but the rank-biserial r = 0.96 is unambiguously
+           large.
+
+H2 — Gemini primarily framed H2 around A < D (field suppresses gaming vs
+     unconstrained). Predicted the field creates a cost gradient making
+     repetitive query-loops less reward-efficient than in a vacuum.
+     Actual: A < D on reward: SUPPORTED (p < 0.001, r = 0.80)
+     Score:  CORRECT on A < D comparison
+     Note: Gemini did not explicitly predict the A < C comparison outcome.
+           The framing was broadly correct: the field does impose overhead
+           vs unconstrained, consistent with Gemini's predicted mechanism.
+
+H3 — Predicted: Supported (SD_A > SD_B, p < 0.05)
+     Actual:    NOT SUPPORTED (p = 0.232); Var(B) > Var(A)
+     Score:     INCORRECT
+     Note: Gemini predicted global perception homogenizes faster. The opposite
+           occurred on the proxy: global field perception (B) produces more
+           cross-seed variance in query_rate than local (A). The mechanism
+           Gemini invoked (universal tax failure mode for B) is contradicted
+           by data showing B is more variable, not less.
+
+Mechanistic — Predicted: r in -0.45 to -0.80 (Pearson, field_entropy vs SSS)
+              Actual:    Pearson mean = -0.639, median = -0.680
+     Score:    CORRECT
+     Note: Gemini gave the most specific quantitative range among all committee
+           members. Actual mean (-0.639) and median (-0.680) fall squarely
+           within the predicted -0.45 to -0.80 range. This is the most
+           precise successful quantitative prediction in the set.
+
+H4 — Predicted: Bimodal distribution (Hartigan's Dip test)
+     Actual:    Cannot evaluate directly (BDI not saved; query_rate std ordering
+                reversed). No evidence for bimodal distribution in available data.
+     Score:     N/A (cannot score with available metrics)
+
+Behavioral homogenization — Predicted: 70%+ of A seeds trend toward
+     homogenization by epoch 200+; alignment phase longer in A.
+     Actual: mean_query_rate in A = 0.782 by epoch 500. Homogenization is
+             present but not at the 0.90-0.95 ceiling predicted (DeepSeek made
+             this more specific). Alignment phase comparison requires epoch series
+             (not saved).
+     Score:  PARTIAL (homogenization confirmed, alignment phase cannot be tested)
+
+GEMINI SCORECARD:
+  H1:           CORRECT
+  H2 (A < D):   CORRECT
+  H3:           INCORRECT
+  Mechanistic:  CORRECT (best quantitative prediction in the committee)
+  H4:           N/A
+  Behavioral:   PARTIAL
+
+Summary: 3.5/5 scoreable (not counting H4). Best prediction: mechanistic range
+(-0.45 to -0.80) exactly bracketing the actual median of -0.680. Key miss: H3,
+where the direction of variance is reversed.
+
+
+================================================================================
+GROK — PREDICTION SCORING
+================================================================================
+
+Submitted prediction summary:
+  H1:           FAIL (p ≥ 0.10, Cohen's d < 0.35 — trivial effect)
+  H2:           FAIL (at most one comparison at Bonferroni threshold)
+  H3:           FAIL (Levene p ≥ 0.15)
+  Mechanistic:  WEAK/NULL (r ≥ -0.15, not reaching p < 0.05 negative; pilot
+                signal attenuates in 500-epoch runs as agents optimize around field)
+  H4:           FAIL (20-30% of seeds)
+  Overall:      Predominantly null result; constraint origin not decisive
+
+--- SCORING ---
+
+H1 — Predicted: FAIL (p ≥ 0.10, d < 0.35)
+     Actual:    Proxy SUPPORTED (p < 0.001, r = 0.96)
+     Score:     INCORRECT
+     Note: Grok predicted the most pessimistic H1 outcome of any committee
+           member. The proxy result is the strongest effect observed in the
+           analysis. Grok's mechanism (emergent field treated as learnable cost
+           signal, not producing structural diversity) is partially correct for
+           the SSS level question, but the temporal coupling signal completely
+           contradicts the "trivial effect" prediction on the proxy.
+
+H2 — Predicted: FAIL (at most one comparison survives Bonferroni)
+     Actual:    FAILS (one of two comparisons fails, p = 0.069)
+     Score:     CORRECT
+     Note: Grok correctly predicted H2 fails at the preregistered threshold.
+           Grok also correctly noted "at most one comparison" — exactly one
+           (A < D) survives. This is the most precisely correct H2 prediction.
+
+H3 — Predicted: FAIL (Levene p ≥ 0.15)
+     Actual:    NOT SUPPORTED, p = 0.232 (above Grok's predicted threshold)
+     Score:     CORRECT (and quantitatively close: predicted p ≥ 0.15, actual 0.232)
+
+Mechanistic — Predicted: WEAK/NULL (r ≥ -0.15, not significant in negative
+              direction; 500-epoch attenuation)
+              Actual:    STRONGLY SUPPORTED (median r = -0.680, p < 0.001)
+     Score:     INCORRECT
+     Note: This is the most significant miss in the committee. Grok's mechanism
+           (agents optimizing around the field in 500-epoch runs, with low-
+           entropy field states reflecting stable low-cost equilibria that
+           ENABLE rather than suppress exploitation) was the most theoretically
+           sophisticated counterargument. It did not materialize. The signal
+           held at full pilot strength (median -0.680 vs pilot -0.650) despite
+           2.5x longer runs. Grok's prediction was directionally wrong and
+           magnitude wrong.
+
+H4 — Predicted: FAIL (20-30% of seeds)
+     Actual:    NOT SUPPORTED
+     Score:     CORRECT
+
+Overall — Predicted: Predominantly null; constraint origin not decisive
+           Actual:    Mixed. Not complete null, not confirmatory.
+                      Mechanistic is decisive positive finding.
+     Score:     PARTIAL
+     Note: "Predominantly null" is too strong — the mechanistic is robustly
+           confirmed. But Grok is correct that constraint origin does not
+           produce clear superiority on alignment measures.
+
+GROK SCORECARD:
+  H1:           INCORRECT
+  H2 outcome:   CORRECT (fails); quantitatively correct on Bonferroni
+  H3:           CORRECT (and quantitatively close)
+  Mechanistic:  INCORRECT (most significant miss)
+  H4:           CORRECT
+  Overall:      PARTIAL
+
+Summary: 3/5 scoreable + 1 partial. Best predictions: H2 and H3 outcomes,
+including the specific Levene p range. Critical miss: mechanistic prediction,
+where Grok predicted attenuation and got strengthening.
+
+
+================================================================================
+DEEPSEEK — PREDICTION SCORING
+================================================================================
+
+Submitted prediction summary:
+  H1:           Supported (p < 0.05, d > 0.5)
+  H2:           Supported for BOTH comparisons (p < 0.025 each)
+  H3:           Supported (within-run SD of per-agent query_rate larger in A)
+  Mechanistic:  Supported (Spearman r < 0, p < 0.05; sign test median r < 0)
+  H4:           Not supported (<60% threshold)
+  Behavioral:   query_rate drifts to ~0.90-0.95 by epoch 500 across all conditions
+
+--- SCORING ---
+
+H1 — Predicted: Supported (p < 0.05, d > 0.5)
+     Actual:    Proxy SUPPORTED (p < 0.001, r = 0.96)
+     Score:     CORRECT
+     Note: DeepSeek was bullish on H1 and correct on direction and confirmation.
+           Effect size d not directly computable on proxy but is clearly large.
+
+H2 — Predicted: BOTH comparisons supported (p < 0.025 each)
+     Actual:    A < D: SUPPORTED (p < 0.001). A < C: NOT SUPPORTED (p = 0.069).
+     Score:     INCORRECT
+     Note: DeepSeek predicted the A < C comparison most confidently (field
+           creates cost gradient suppressing flooding better than static tax).
+           This is the comparison that failed. The A < D comparison was
+           considered less certain but also predicted to pass. Result was the
+           opposite of what DeepSeek expected: A < D is the robust result,
+           A < C is marginal. On reward proxy, A (30.89) is marginally above
+           C (29.54) — emergent constraint appears slightly MORE efficient than
+           fixed tax on this metric, contradicting DeepSeek's mechanism.
+
+H3 — Predicted: Supported (within-run SD per-agent query_rate: A > B)
+     Actual:    NOT SUPPORTED on proxy (cross-seed variance: Var(B) > Var(A))
+     Score:     INCORRECT
+     Note: DeepSeek's rationale (local perception allows slightly different
+           effective costs per agent, producing trajectory variance) was
+           theoretically sound but empirically not supported. Direction reversed.
+
+Mechanistic — Predicted: Supported (Spearman r < 0, p < 0.05; median r < 0)
+              Actual:    STRONGLY SUPPORTED (Pearson r, median = -0.680, p < 0.001)
+     Score:     CORRECT
+     Note: DeepSeek correctly called the mechanistic confirmation. The pilot-
+           derived rationale (500 epochs may attenuate vs 200) was addressed
+           correctly — signal held. DeepSeek's sign test prediction (median r < 0)
+           is confirmed (49/50 seeds negative).
+
+H4 — Predicted: Not supported (<60% threshold)
+     Actual:    NOT SUPPORTED
+     Score:     CORRECT
+
+Behavioral homogenization — Predicted: query_rate drifts to ~0.90-0.95 by epoch 500
+     Actual: mean_query_rate at epoch 500: A=0.782, B=0.770, C=0.784, D=0.305
+     Score:  INCORRECT on level (A/B/C converged to ~0.78, not 0.90-0.95);
+             CORRECT that D is different (D=0.305 shows unconstrained diverges).
+             NOTE: DeepSeek predicted slower drift in A due to emergent cost
+             modulation — the final values for A/B/C are similar, consistent
+             with homogenization but at a lower ceiling than predicted.
+
+DEEPSEEK SCORECARD:
+  H1:           CORRECT
+  H2:           INCORRECT (both comparisons predicted to pass; only A<D passed)
+  H3:           INCORRECT (direction reversed)
+  Mechanistic:  CORRECT
+  H4:           CORRECT
+  Behavioral:   PARTIAL (homogenization confirmed; ceiling lower than predicted)
+
+Summary: 3/5 + 1 partial. Best predictions: H1, mechanistic, H4. Key miss: H2
+(overconfident that both comparisons would pass), H3 (direction reversed).
+
+
+================================================================================
+CLAUDE (EXPERIMENT MANAGER) — PREDICTION SCORING
+================================================================================
+
+Submitted prediction summary:
+  H1:           Confirmed (p < 0.05, d = 0.5-0.8; field causally active as
+                temporal modulator)
+  H2:           SPLIT — A < C confirmed; A < D not confirmed (emergent field
+                raises costs dynamically, producing gaming-adjacent behavior
+                even more than D)
+  H3:           Confirmed (Var(A) > Var(B); global homogenizes faster)
+  Mechanistic:  Confirmed (sign test outperforms pooled Spearman; pilot signal
+                strengthens at 500 epochs)
+  H4:           Not confirmed (20-35% of seeds exceed threshold)
+  Overall:      H1 confirmed, H2 partially (A < C only), H3 confirmed,
+                mechanistic confirmed, H4 below threshold
+
+--- SCORING ---
+
+H1 — Predicted: Confirmed (d = 0.5-0.8)
+     Actual:    Proxy SUPPORTED (r = 0.96)
+     Score:     CORRECT on confirmation
+     Note: Direction and confirmation correct. Effect size predicted as moderate
+           (d = 0.5-0.8); actual proxy effect (r = 0.96) suggests something
+           larger, though cross-distribution comparisons make d unavailable.
+
+H2 — Predicted: SPLIT — A < C confirmed; A < D NOT confirmed
+     Actual:    REVERSED split — A < D CONFIRMED; A < C NOT confirmed (p=0.069)
+     Score:     INCORRECT on WHICH comparison survives (direction wrong)
+     Note: This is the most notable error in the manager's predictions. I
+           predicted A < D would fail because unconstrained agents find low-cost
+           silence equilibria and don't exhibit exploitation loops. The actual
+           result shows A earns significantly less than D (30.89 vs 38.93),
+           meaning D is more efficient. D's query_rate = 0.305 (agents found
+           silence IS the optimal strategy without cost pressure) while A
+           remains at 0.782 (agents are paying communication costs without
+           offsetting gains). The manager correctly predicted H2 would partially
+           fail, but got which part wrong.
+
+H3 — Predicted: Confirmed (Var(A) > Var(B))
+     Actual:    NOT SUPPORTED; Var(B) > Var(A) (reversed)
+     Score:     INCORRECT
+     Note: My rationale (global perception homogenizes faster by giving all
+           agents identical information) did not hold. Global perception (B)
+           produced more variable outcomes across seeds, not less. This is
+           the most consistently wrong prediction across all committee members.
+           The mechanism driving H3 reversal — whatever it is — was not
+           anticipated by any committee member.
+
+Mechanistic — Predicted: Confirmed; sign test outperforms pooled Spearman;
+              signal strengthens at 500 epochs
+              Actual:    STRONGLY CONFIRMED (p < 0.001, median = -0.680)
+     Score:     CORRECT
+     Note: The prediction that the signal would strengthen at 500 epochs
+           (vs pilot's -0.650 over 200 epochs) was confirmed: median -0.680,
+           mean -0.639. The sign test as sensitivity measure is appropriate
+           (49/50 seeds negative).
+
+H4 — Predicted: Not confirmed (20-35% of seeds)
+     Actual:    NOT SUPPORTED
+     Score:     CORRECT
+
+Overall bottom line — Predicted: Partial support; H1 and H3 confirmed,
+     H2 partially, primary claim not fully met
+     Actual: H1 proxy confirmed, H2 fails, H3 reversed, primary claim not
+             fully met
+     Score:  PARTIAL — Bottom-line outcome (not fully confirmed) is correct,
+             but H3 was wrong and H2 direction was wrong.
+
+CLAUDE (MANAGER) SCORECARD:
+  H1:               CORRECT (confirmation and direction)
+  H2 outcome:       PARTIAL (H2 fails overall — correct; but which comparison
+                    survives is reversed)
+  H3:               INCORRECT
+  Mechanistic:      CORRECT (direction, confirmation, and strengthening at 500ep)
+  H4:               CORRECT
+  Overall outcome:  PARTIAL
+
+Summary: 3/5 + 2 partial. Best predictions: mechanistic (including the 500-epoch
+strengthening); overall bottom line. Key miss: H3 (reversed), H2 directionality.
+
+
+================================================================================
+CROSS-COMMITTEE SUMMARY TABLE
+================================================================================
+
+                   ChatGPT    Gemini     Grok       DeepSeek   Claude(Mgr)
+H1 outcome:        INCORRECT  CORRECT    INCORRECT  CORRECT    CORRECT
+H2 outcome:        CORRECT    CORRECT*   CORRECT    INCORRECT  PARTIAL
+H3 outcome:        CORRECT    INCORRECT  CORRECT    INCORRECT  INCORRECT
+Mechanistic:       PARTIAL    CORRECT    INCORRECT  CORRECT    CORRECT
+H4 outcome:        CORRECT    N/A        CORRECT    CORRECT    CORRECT
+Bottom line:       CORRECT    N/A        PARTIAL    PARTIAL    PARTIAL
+
+* Gemini scored on A<D component; full H2 analysis not explicit
+
+Raw score (CORRECT=1, PARTIAL=0.5, INCORRECT=0, N/A=excluded):
+  ChatGPT:     3.5 / 5 scoreable
+  Gemini:      3.5 / 4 scoreable  (H4 N/A)
+  Grok:        3.0 / 5 scoreable
+  DeepSeek:    3.0 / 5 scoreable
+  Claude(Mgr): 3.0 / 5 + 1 partial = 3.5 / 5
+
+================================================================================
+FINDING-BY-FINDING COMMITTEE CONSENSUS
+================================================================================
+
+H1 PROXY (strong field structuring effect):
+  3 of 5 predicted supported (Gemini, DeepSeek, Claude); 2 predicted fail
+  (ChatGPT, Grok). Majority correct.
+  The skeptics (ChatGPT, Grok) predicted a small or null effect. The actual
+  proxy effect (r=0.96) is near-ceiling. However, this is on the coupling
+  coefficient proxy, not SSS itself. The skeptics may still be correct that
+  the direct SSS test would have been less dramatic.
+
+H2 OVERALL FAILURE:
+  4 of 5 correctly predicted H2 fails (ChatGPT, Grok, Claude, partially Gemini).
+  DeepSeek alone predicted both comparisons would succeed.
+  Near-consensus: H2 does not fully clear the Bonferroni-corrected two-comparison
+  threshold.
+
+H3 REVERSAL (Var(B) > Var(A)):
+  NO committee member predicted the observed direction. ChatGPT and Grok predicted
+  correct outcome (H3 fails) but expected A approximately equal to B, not B
+  clearly exceeding A. Gemini and DeepSeek predicted A > B (wrong direction).
+  Claude (manager) predicted A > B (wrong direction).
+  The H3 reversal is the genuine surprise of this dataset. Global field
+  perception producing MORE behavioral variance than local perception was not
+  in any committee member's model of the system.
+
+MECHANISTIC SIGNAL STRENGTH:
+  3 of 5 correctly predicted strong confirmation (Gemini, DeepSeek, Claude).
+  ChatGPT predicted moderate (-0.20 to -0.50); actual is stronger (-0.639 mean).
+  Grok predicted null/weak — the most notable miss in the committee.
+  Gemini's quantitative range (-0.45 to -0.80) is the best specific prediction,
+  bracketing the actual median of -0.680 exactly.
+
+H4 FAILURE:
+  4 of 5 correctly predicted H4 fails. (Gemini N/A).
+  Near-consensus, confirmed.
+
+QUERY_RATE HOMOGENIZATION LEVEL:
+  DeepSeek predicted 0.90-0.95 ceiling by epoch 500.
+  Actual: A=0.782, B=0.770, C=0.784, D=0.305.
+  The constrained conditions converge at ~0.78, not 0.90-0.95. D is the exception
+  at 0.305 (silence strategy under no-cost regime). No committee member predicted
+  this split, though all predicted D would behave differently.
+
+================================================================================
+NOTABLE PREDICTIONS
+================================================================================
+
+Most accurate overall: GEMINI
+  Correctly predicted H1 (large effect), A < D (correct mechanism), and the
+  mechanistic range (-0.45 to -0.80 brackets actual median -0.680). The
+  quantitative mechanistic prediction is the most precise successful forecast
+  in the committee.
+
+Most accurate single prediction: GEMINI (mechanistic range)
+  Predicted r in -0.45 to -0.80. Actual: mean -0.639, median -0.680.
+  Exact bracket. This required correctly predicting the pilot signal would
+  hold through 500-epoch confirmatory runs, against Grok's attenuation
+  argument.
+
+Most notable correct skepticism: CHATGPT and GROK (H2 and H3 failures)
+  Both predicted H2 would not fully confirm and H3 would fail. Both are
+  correct on outcomes even if mechanisms differ.
+
+Most significant miss: GROK (mechanistic prediction)
+  Predicted r ≥ -0.15 (effectively null). Actual: median -0.680. The mechanism
+  Grok proposed (low-entropy fields enabling stable low-cost equilibria) was
+  theoretically coherent but empirically false. This is the largest magnitude
+  error in the committee.
+
+Biggest surprise (no committee member predicted): H3 REVERSAL
+  Every committee member who addressed the direction of H3 predicted A ≥ B.
+  Actual: Var(B) > Var(A) on query_rate cross-seed variance (Var ratio = 0.66).
+  Global field perception destabilizes behavioral convergence across seeds more
+  than local perception. This was outside the model of all five committee members.
+
+Manager's notable error: H2 directionality
+  I predicted A < C (emergent beats fixed tax) and A ≈ D (D finds silence
+  strategy, producing low ELR without constraint overhead). The actual result
+  is the opposite: A < D is robust and A vs C is marginal. D agents learn
+  silence is optimal (query_rate=0.305) and achieve high reward (38.93).
+  The silence strategy is not exploitation in the gaming sense — it is
+  rational cost minimization. I failed to predict this would produce
+  significantly higher reward than either constrained condition.
+
+================================================================================
+SERIES COMMITTEE ACCURACY NOTE
+================================================================================
+
+These predictions were made prior to confirmatory runs with access to:
+  - Full preregistration v3 (with pilot revisions)
+  - 60-run pilot results (8bf2f6f)
+  - Series context (P2-P5)
+
+The committee faced genuine uncertainty. Key outcomes that were predictable
+from the pilot (mechanistic signal, H4 failure, homogenization) showed high
+consensus accuracy. The unpredictable outcomes (H3 reversal, which H2
+comparison would survive) showed consistent errors across all members.
+
+This is consistent with the committee serving its intended function: correctly
+calibrating the primary claim as "uncertain/likely partial" while the
+mechanistic mechanism was robustly anticipated.
+
+================================================================================
+END OF SCORING REPORT
+================================================================================
