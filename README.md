@@ -17,16 +17,13 @@ statistical analysis complete, results paper published.
 | Pilot commit | adca6fc (tag: p6-pilot-pre-run) |
 | Confirmatory pre-run tag | da5cc47 (tag: p6-confirmatory-pre-run) |
 | Confirmatory complete tag | 4a12315 (tag: p6-confirmatory-complete) |
+| Results Paper DOI | [10.5281/zenodo.19485185](https://doi.org/10.5281/zenodo.19485185) |
 
 ## Overview
 
-Protocol 6 extends the Protocol 5 three-agent MARL harness with an emergent
-constraint field mechanism. Agents self-assemble a shared constraint landscape
-through signal emission. The field diffuses, decays, and modulates signal costs
-locally — each agent perceives only its own field value.
+Protocol 6 extends the Protocol 5 three-agent MARL harness with an emergent constraint field mechanism. Agents self-assemble a shared constraint landscape through signal emission. The field diffuses, decays, and modulates signal costs locally. Four conditions tested: emergent local perception (A), emergent global perception (B), fixed external constraint matched cost (C), and no constraint (D). 200 confirmatory runs (50 seeds × 4 conditions, 500 epochs each).
 
-Four conditions were tested across 200 confirmatory seeds (50 per condition,
-500 epochs each):
+Key results: Mechanistic prediction strongly confirmed (median entropy–SSS r = −0.680, p < 0.001). Primary behavioral claim not confirmed (A vs. C, p = 0.069). H3 reversed — global field perception produced more behavioral variance than local, contrary to all committee predictions. Governance conclusion: emergent constraint fields are causally active but do not outperform fixed external rules. Passive emergence is insufficient as a governance strategy.
 
 | Condition | Description |
 |-----------|-------------|
@@ -74,20 +71,26 @@ better behavioral outcomes than a fixed external rule of equivalent cost.
 | `docs/P6_Prediction_Scoring_Report.txt` | AI committee prediction scoring |
 | `results/p6_confirmatory/` | Per-seed JSON results (200 files) |
 
-## Quick Start
+## Pilot
+
+Parameter sweep: 6 combinations × 10 seeds = 60 runs, 200 epochs each.
+Selected regime: dc=0.1, dr=0.05. Results: `p6_pilot_summary.json`.
 
 ```bash
-cd backend
-pip install -r requirements.txt
-
-# Re-run pilot
+cd backend && pip install -r requirements.txt
 python run_p6_pilot.py
+```
 
-# Re-run confirmatory (single condition)
+## Confirmatory
+
+200 seeds (50 per condition), 500 epochs each. Results paper: [10.5281/zenodo.19485185](https://doi.org/10.5281/zenodo.19485185).
+
+```bash
+# Single condition (parallelisable across GPUs)
 python run_p6_confirmatory.py --condition A
 
-# Run tests
-python -m pytest tests/ -v   # 70 tests, all pass
+# Tests (70 pass)
+python -m pytest tests/ -v
 ```
 
 ## Series Context
